@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/kloop-api/static/css/main.5f361e03.chunk.css",
+    "main.js": "/kloop-api/static/js/main.67cf8cb4.chunk.js",
+    "main.js.map": "/kloop-api/static/js/main.67cf8cb4.chunk.js.map",
+    "runtime-main.js": "/kloop-api/static/js/runtime-main.c25a98e1.js",
+    "runtime-main.js.map": "/kloop-api/static/js/runtime-main.c25a98e1.js.map",
+    "static/js/2.0111f81a.chunk.js": "/kloop-api/static/js/2.0111f81a.chunk.js",
+    "static/js/2.0111f81a.chunk.js.map": "/kloop-api/static/js/2.0111f81a.chunk.js.map",
+    "index.html": "/kloop-api/index.html",
+    "precache-manifest.da17f65b4af19718544863467ed1fa58.js": "/kloop-api/precache-manifest.da17f65b4af19718544863467ed1fa58.js",
+    "service-worker.js": "/kloop-api/service-worker.js",
+    "static/css/main.5f361e03.chunk.css.map": "/kloop-api/static/css/main.5f361e03.chunk.css.map",
+    "static/js/2.0111f81a.chunk.js.LICENSE.txt": "/kloop-api/static/js/2.0111f81a.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.c25a98e1.js",
+    "static/js/2.0111f81a.chunk.js",
+    "static/css/main.5f361e03.chunk.css",
+    "static/js/main.67cf8cb4.chunk.js"
+  ]
+}
