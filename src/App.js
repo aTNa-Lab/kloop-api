@@ -4,13 +4,16 @@ import UploadEmbed from './Components/UploadEmbed/UploadEmbed'
 import { Button, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Charts from './Components/Charts/Charts'
+import Frames from './Components/Frames/Frames'
 import ReactEcharts from "echarts-for-react";
 import './App.css';
-import {extent, timeFormat, range} from 'd3'
+import {extent, timeFormat, range, sum, max} from 'd3'
+import {nest} from 'd3-collection'
 import * as test from './test.json'
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -28,6 +31,13 @@ const useStyles = makeStyles((theme) => ({
   },
   images: {
     height: 300
+  },
+  spinner: {
+    color: 'grey',
+    right: 0,
+    top: 0,
+    margin: '15px',
+    position: "absolute"
   }
 }));
 
@@ -41,10 +51,15 @@ function App() {
   const [closest, setClosest] = useState([])
   const [farest, setFarest] = useState([])
   const [ready, setReady] = useState(false)
+  const [quantity, setQuantity] = useState(3)
+  const [showSpinner, setSpinner] = useState(false)
+  const [dates, setDates] = useState(null)
+  const [timeRange, setTimeRange] = useState(null)
+  const [charts, setCharts] = useState(false)
 
-  useEffect(() => {
-    setData(test.default)
-  }, [])
+  // useEffect(() => {
+  //   setData(test.default)
+  // }, [])
   
 
   const handleEmbedChange = (event) => {
@@ -57,6 +72,7 @@ function App() {
   }
 
   const handlePostData = async () => {
+    setSpinner(true)
     console.log("Sending data")
     const formData = new FormData();
 
@@ -76,7 +92,7 @@ function App() {
       let result = await response.json();
       setData(result)
       console.log(result)
-      sortData()
+      sortData(result)
         
     } catch (error) {
       console.error('Ошибка:', error);
@@ -108,16 +124,20 @@ function App() {
     }
   }
 
-  const sortData = () => {
-    let metadata = Object.values(data[0].metadata)
+  const sortData = (array) => {
+    let metadata = Object.values(array[0].metadata)
     console.log(metadata)
     const sortedArr = [...metadata].sort((a, b) => a.distance - b.distance)
     setSorted(sortedArr)
+    getFrames(sortedArr)
+    nestData(sortedArr)
   }
 
-  const getFrames = (n) => {
-    let closestFrames = sortedMetadata.slice(sortedMetadata.length-n)
-    let farestFrames = sortedMetadata.slice(0, n)
+  const getFrames = (array) => {
+    // let closestFrames = sortedMetadata.slice(sortedMetadata.length-n)
+    // let farestFrames = sortedMetadata.slice(0, n)
+    let closestFrames = array.slice(array.length-quantity)
+    let farestFrames = array.slice(0, quantity)
     console.log("closest", closestFrames)
     console.log("farest", farestFrames)
     let closestFramesData = []
@@ -126,79 +146,49 @@ function App() {
     farestFrames.forEach(frame => handleGetData(frame).then(d => farestFramesData.push(d)))
     setClosest(closestFramesData)
     setFarest(farestFramesData)
+    setTimeout(() => setSpinner(false), 2000);
   }
 
-
-
-  const nestData = () => {
-    let day = timeFormat("%U");
-    let flatdata = Object.values(data)
-    let dataExtent = extent(flatdata, d => day(d.date));
-    console.log(dataExtent)
-    let timeRange = range(dataExtent[0], dataExtent[1]);
+  const nestData = (array) => {
+    let week = timeFormat("%U");
+    let flatdata = array
+    let dateExtent = extent(flatdata, d => week(Date.parse(d.appearance_time)));
+    console.log("Time extent", dateExtent)
+    let maxDate = week(max(flatdata, d => new Date(d.appearance_time)))
+    console.log("MAX", maxDate)
+    let timeRange = range(dateExtent[0], dateExtent[1]).concat(maxDate);
     console.log(timeRange)
+    let nested = nest().key(d => week(Date.parse(d.appearance_time)))
+                       .rollup(values => sum(values, d => +1))
+                       .map(flatdata)
+    console.log("NESTED", nested)
+    let dates = timeRange.map(d => (d < 10 ? nested.get('0' + d) : nested.get(d)) || 0)
+    console.log(dates)
+    setDates(dates)
+    setTimeRange(timeRange)
   }
 
-  const returnImages = (n) => {
-    console.log("img fired")
-        let closestImgs = closest.map((tile, i) => {
-          console.log("TILE", tile)
-          return(
-          <GridListTile key={i}>
-            <img src={tile.image} alt={i} className={classes.images} />
-            <GridListTileBar
-              title={tile.metadata.distance}
-            />
-          </GridListTile>
-        )})
-        let farestImgs = farest.map((tile, i) => {
-          console.log("TILE", tile)
-          return(
-          <GridListTile key={i}>
-            <img src={tile.image} alt={i} className={classes.images} />
-            <GridListTileBar
-              title={tile.metadata.distance}
-            />
-          </GridListTile>
-        )})
-    return (
-      <div>
-        <h2>Closest</h2>
-        <GridList className={classes.gridList} cols={3} cellHeight="auto">
-          {closestImgs}
-        </GridList>
-        <h2>Farest</h2>
-        <GridList className={classes.gridList} cols={3} cellHeight="auto">
-          {farestImgs}
-        </GridList>
-    </div>
-    )
+  const showImages = () => {
+    setReady(!ready)
   }
 
-  const showImages = (n) => {
-    getFrames(n)
-    returnImages(n)
-    setReady(true)
+  const showCharts = () => {
+    setCharts(!charts)
   }
 
 
   return (
     <div className="App">
+    <div className={classes.spinner}>{showSpinner ? <CircularProgress size={32} style={{color: 'grey'}} /> : null}</div>
     <Grid container direction="column" alignItems="center" justify="center">
       <Grid container justify="center" className={classes.gridItem}><Dropzone handleChange={handleFileChange} /></Grid>
       <Grid container justify="center" className={classes.gridItem}><UploadEmbed handleChange={handleEmbedChange} value={embed}/></Grid>
       <Grid container justify="center" className={classes.gridItem}><button onClick={() => handlePostData()}>Send Data</button></Grid>
       <Grid container justify="center" className={classes.gridItem}><button onClick={() => showImages(3)}>Show Images</button></Grid>
-        {ready ? returnImages() : null}
+      <Grid container justify="center" className={classes.gridItem}><button onClick={() => showCharts()}>Show Charts</button></Grid>
     </Grid>
-    <button onClick={() => console.log(data)}>result</button>
-    <button onClick={() => nestData()}>nest</button>
-    <button onClick={() => sortData()}>sort</button>
-    <button onClick={() => getFrames(3)}>frames</button>
-    <button onClick={() => console.log(closest)}>console closest</button>
-    {/* <Charts /> */}
-    
-
+      {ready ? <Frames farest={farest} closest={closest} quantity={quantity} /> : null}
+      {charts ? <Charts timeRange={timeRange} dates={dates}/> : null }
     </div>
   );
 }
