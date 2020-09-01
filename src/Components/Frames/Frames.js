@@ -7,7 +7,16 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 
 const useStyles = makeStyles((theme) => ({
   images: {
-    height: 300
+    // height: 300,
+    // width: 350
+  },
+  gridList: {
+    // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
+    transform: 'translateZ(0)',
+    padding: 20
+  },
+  header : {
+      marginBottom: 0
   }
 }));
 
@@ -15,8 +24,8 @@ const Frames = (props) => {
     const classes = useStyles();
     let closestImgs = props.closest.map((tile, i) => {
       return(
-      <GridListTile key={i}>
-        <img src={tile.image} alt={i} className={classes.images} />
+      <GridListTile key={i} style={{width: 375}}>
+        <img src={tile.image} alt={i} />
         <GridListTileBar
           title={tile.metadata.distance}
         />
@@ -24,8 +33,8 @@ const Frames = (props) => {
     )})
     let farestImgs = props.farest.map((tile, i) => {
       return(
-      <GridListTile key={i}>
-        <img src={tile.image} alt={i} className={classes.images} />
+      <GridListTile key={i} style={{width: 375}}>
+        <img src={tile.image} alt={i} />
         <GridListTileBar
           title={tile.metadata.distance}
         />
@@ -33,12 +42,12 @@ const Frames = (props) => {
     )})
 return (
   <div>
-    <h2>Closest</h2>
-    <GridList className={classes.gridList} cols={props.quantity} cellHeight="auto">
+    <h2 className={classes.header}>Closest</h2>
+    <GridList className={classes.gridList} cols={props.quantity || 1} cellHeight={300}>
       {closestImgs}
     </GridList>
-    <h2>Farest</h2>
-    <GridList className={classes.gridList} cols={props.quantity} cellHeight="auto">
+    <h2 className={classes.header}>Farest</h2>
+    <GridList className={classes.gridList} cols={props.quantity || 1} cellHeight={300}>
       {farestImgs}
     </GridList>
 </div>

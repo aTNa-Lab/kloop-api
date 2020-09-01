@@ -5,14 +5,10 @@ import { Button, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Charts from './Components/Charts/Charts'
 import Frames from './Components/Frames/Frames'
-import ReactEcharts from "echarts-for-react";
 import './App.css';
 import {extent, timeFormat, range, sum, max} from 'd3'
 import {nest} from 'd3-collection'
 import * as test from './test.json'
-import GridList from '@material-ui/core/GridList';
-import GridListTile from '@material-ui/core/GridListTile';
-import GridListTileBar from '@material-ui/core/GridListTileBar';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 const useStyles = makeStyles((theme) => ({
@@ -24,13 +20,6 @@ const useStyles = makeStyles((theme) => ({
   gridItem: {
     padding: theme.spacing(1),
     width: '50%'
-  },
-  gridList: {
-    // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
-    transform: 'translateZ(0)',
-  },
-  images: {
-    height: 300
   },
   spinner: {
     color: 'grey',
@@ -186,8 +175,8 @@ function App() {
       <Grid container justify="center" className={classes.gridItem}><button onClick={() => handlePostData()}>Send Data</button></Grid>
       <Grid container justify="center" className={classes.gridItem}><button onClick={() => showImages(3)}>Show Images</button></Grid>
       <Grid container justify="center" className={classes.gridItem}><button onClick={() => showCharts()}>Show Charts</button></Grid>
-    </Grid>
       {ready ? <Frames farest={farest} closest={closest} quantity={quantity} /> : null}
+    </Grid>
       {charts ? <Charts timeRange={timeRange} dates={dates}/> : null }
     </div>
   );
