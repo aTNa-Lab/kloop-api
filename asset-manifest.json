@@ -1,22 +1,22 @@
 {
   "files": {
     "main.css": "/kloop-api/static/css/main.eab24d3c.chunk.css",
-    "main.js": "/kloop-api/static/js/main.ca0460ac.chunk.js",
-    "main.js.map": "/kloop-api/static/js/main.ca0460ac.chunk.js.map",
+    "main.js": "/kloop-api/static/js/main.f31b2585.chunk.js",
+    "main.js.map": "/kloop-api/static/js/main.f31b2585.chunk.js.map",
     "runtime-main.js": "/kloop-api/static/js/runtime-main.c25a98e1.js",
     "runtime-main.js.map": "/kloop-api/static/js/runtime-main.c25a98e1.js.map",
-    "static/js/2.cb8eaa1b.chunk.js": "/kloop-api/static/js/2.cb8eaa1b.chunk.js",
-    "static/js/2.cb8eaa1b.chunk.js.map": "/kloop-api/static/js/2.cb8eaa1b.chunk.js.map",
+    "static/js/2.598ebc67.chunk.js": "/kloop-api/static/js/2.598ebc67.chunk.js",
+    "static/js/2.598ebc67.chunk.js.map": "/kloop-api/static/js/2.598ebc67.chunk.js.map",
     "index.html": "/kloop-api/index.html",
-    "precache-manifest.3eef313534ed38a8ca08c9f106e05870.js": "/kloop-api/precache-manifest.3eef313534ed38a8ca08c9f106e05870.js",
+    "precache-manifest.f5af67c57317e5aadbf033055a8bc7d3.js": "/kloop-api/precache-manifest.f5af67c57317e5aadbf033055a8bc7d3.js",
     "service-worker.js": "/kloop-api/service-worker.js",
     "static/css/main.eab24d3c.chunk.css.map": "/kloop-api/static/css/main.eab24d3c.chunk.css.map",
-    "static/js/2.cb8eaa1b.chunk.js.LICENSE.txt": "/kloop-api/static/js/2.cb8eaa1b.chunk.js.LICENSE.txt"
+    "static/js/2.598ebc67.chunk.js.LICENSE.txt": "/kloop-api/static/js/2.598ebc67.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.c25a98e1.js",
-    "static/js/2.cb8eaa1b.chunk.js",
+    "static/js/2.598ebc67.chunk.js",
     "static/css/main.eab24d3c.chunk.css",
-    "static/js/main.ca0460ac.chunk.js"
+    "static/js/main.f31b2585.chunk.js"
   ]
 }
