@@ -46,7 +46,7 @@ return (
     <GridList className={classes.gridList} cols={props.quantity || 1} cellHeight={300}>
       {closestImgs}
     </GridList>
-    <h2 className={classes.header}>Farest</h2>
+    <h2 className={classes.header}>Farthest</h2>
     <GridList className={classes.gridList} cols={props.quantity || 1} cellHeight={300}>
       {farestImgs}
     </GridList>

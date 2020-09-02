@@ -25,6 +25,7 @@ const Dropzone = (props) => {
 	const onDrop = useCallback((acceptedFiles) => {
 	  acceptedFiles.forEach((file) => {
 		props.handleChange(file)
+		props.handleClick()
 	  })
 	}, [])
 	
