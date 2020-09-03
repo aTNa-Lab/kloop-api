@@ -26,6 +26,11 @@ const Dropzone = (props) => {
 	  acceptedFiles.forEach((file) => {
 		props.handleChange(file)
 		props.handleClick()
+		let reader = new FileReader();
+		reader.onloadend = () => {
+			props.setImage(reader.result)
+		}
+		reader.readAsDataURL(file)
 	  })
 	}, [])
 	

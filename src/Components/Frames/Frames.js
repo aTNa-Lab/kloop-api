@@ -13,10 +13,13 @@ const useStyles = makeStyles((theme) => ({
   gridList: {
     // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
     transform: 'translateZ(0)',
-    padding: 20
+    paddingRight: 20,
+    paddingLeft: 20,
+    paddingTop: 10
   },
   header : {
-      marginBottom: 0
+      marginBottom: 0,
+      paddingLeft: 20
   }
 }));
 
@@ -24,8 +27,8 @@ const Frames = (props) => {
     const classes = useStyles();
     let closestImgs = props.closest.map((tile, i) => {
       return(
-      <GridListTile key={i} style={{width: 375}}>
-        <img src={tile.image} alt={i} />
+      <GridListTile key={i} style={{minWidth: 375}}>
+        <img src={tile.image} alt={i} style={{height: 300}} />
         <GridListTileBar
           title={tile.metadata.distance}
         />
@@ -33,8 +36,8 @@ const Frames = (props) => {
     )})
     let farestImgs = props.farest.map((tile, i) => {
       return(
-      <GridListTile key={i} style={{width: 375}}>
-        <img src={tile.image} alt={i} />
+      <GridListTile key={i} style={{minWidth: 375}}>
+        <img src={tile.image} alt={i} style={{height: 300}}/>
         <GridListTileBar
           title={tile.metadata.distance}
         />

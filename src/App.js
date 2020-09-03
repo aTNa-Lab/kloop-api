@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import Dropzone from './Components/UploadFile/Dropzone'
 import UploadEmbed from './Components/UploadEmbed/UploadEmbed'
-import { Button, Grid, TextField } from '@material-ui/core';
+import { Button, Grid, TextField, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Charts from './Components/Charts/Charts'
 import Frames from './Components/Frames/Frames'
 import './App.css';
-import {extent, timeFormat, range, sum, max, timeParse, scaleTime, timeDays} from 'd3'
+import {extent, timeFormat, range, sum, max, timeParse, scaleTime, timeHours, timeDays} from 'd3'
 import {nest} from 'd3-collection'
 import * as test from './test.json'
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -23,10 +23,11 @@ const useStyles = makeStyles((theme) => ({
   },
   spinner: {
     color: 'grey',
-    right: 0,
-    top: 0,
-    margin: '15px',
-    position: "absolute"
+    // right: 0,
+    // top: 0,
+    // margin: '15px',
+    // position: "absolute"
+    paddingLeft: 10
   }
 }));
 
@@ -46,6 +47,7 @@ function App() {
   const [timeRange, setTimeRange] = useState(null)
   const [charts, setCharts] = useState(false)
   const [radius, setRadius] = useState(0.93)
+  const [initialImage, setInitial] = useState(null)
 
   // useEffect(() => {
   //   setData(test.default)
@@ -162,7 +164,7 @@ function App() {
 
   const nestData = (array) => {
     let week = timeFormat("%U");
-    let hour = timeFormat("%Y-%m-%d");
+    let hour = timeFormat("%Y-%m-%d %H:00");
     let flatdata = array
     let dateExtent = extent(flatdata, d => week(Date.parse(d.appearance_time)));
     console.log("Time extent", dateExtent)
@@ -178,7 +180,8 @@ function App() {
     console.log("HOUR NEST", nestHour)
     let extentHours = extent(nestHour.keys())
     console.log(extentHours)
-    let timeScale = timeDays(new Date(extentHours[0]), new Date(extentHours[1]))
+    // let timeScale = timeDays(new Date(extentHours[0]), new Date(extentHours[1]))
+    let timeScale = timeHours(new Date(extentHours[0]), new Date(extentHours[1])).concat(new Date(extentHours[1]))
     let hourScale = timeScale.map(d => hour(d))
 
     let dates = timeRange.map(d => (d < 10 ? nested.get('0' + d) : nested.get(d)) || 0)
@@ -205,23 +208,35 @@ function App() {
 
   return (
     <div className="App">
-    <div className={classes.spinner}>{showSpinner ? <CircularProgress size={32} style={{color: 'grey'}} /> : null}</div>
     <Grid container direction="column" alignItems="center" justify="center">
       <Grid container justify="center" className={classes.gridItem}>
-        <Dropzone handleChange={handleFileChange} handleClick={handleSnackbarClick} />
+        <Dropzone handleChange={handleFileChange} handleClick={handleSnackbarClick} setImage={setInitial} />
       </Grid>
-      <Grid container justify="center" className={classes.gridItem}><UploadEmbed handleChange={handleEmbedChange} value={embed}/></Grid>
+      {/* <Grid container justify="center" className={classes.gridItem}><UploadEmbed handleChange={handleEmbedChange} value={embed}/></Grid> */}
       <Grid container justify="center" className={classes.gridItem}>
-        <TextField id="radius" size="small" label="Radius" value={radius} onChange={handleRadiusChange} />
-        <button onClick={() => handlePostData()}>Send Data</button>
+        {initialImage ? <img src={initialImage} alt="initial_image" style={{height: 300}} /> : null}
       </Grid>
-      <Grid container justify="center" className={classes.gridItem}><button onClick={() => showImages(3)}>Show Images</button></Grid>
-      <Grid container justify="center" className={classes.gridItem}><button onClick={() => showCharts()}>Show Charts</button></Grid>
-      {ready ? <Frames farest={farest} closest={closest} quantity={quantity} /> : null}
+      <Grid container justify="center" className={classes.gridItem}>
+        <TextField variant="outlined" id="radius" size="small" label="Radius" value={radius} onChange={handleRadiusChange} />
+        <Button variant="contained" size="small" onClick={() => handlePostData()}>Send Data</Button>
+        <div className={classes.spinner}>{showSpinner ? <CircularProgress size={32} style={{color: 'grey'}} /> : null}</div>
+      </Grid>
     </Grid>
+    <div style={{padding: 20}}>
+      <Grid container justify="center">
+      <Typography variant="h5" style={{margin: 0, paddingRight: 10}}>Images</Typography>
+      <Button variant="contained" size="small" onClick={() => showImages(3)}>Show</Button>
+      </Grid>
+      {ready ? <Frames farest={farest} closest={closest} quantity={quantity} /> : null}
+    </div>
+    <div style={{padding: 20}}>
+      <Grid container justify="center">
+      <Typography variant="h5" style={{margin: 0, paddingRight: 10}}>Charts</Typography>
+      <Button variant="contained" size="small" onClick={() => showCharts()}>Show</Button>
+      </Grid>
       {charts ? <Charts timeRange={timeRange} dates={dates}/> : null }
+    </div>
       <Snackbar handleClose={handleSnackbarClose} open={openSnackbar} />
-      <button onClick={() => console.log(scaleTime().domain())}>SCALE TIME TEST</button>
     </div>
   );
 }

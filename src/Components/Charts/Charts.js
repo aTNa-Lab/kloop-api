@@ -83,7 +83,7 @@ import ReactEcharts from "echarts-for-react";
 const Charts = (props) => {
     console.log("GOT", props)
     return (
-        <div>
+        <div style={{padding: 20}}>
           <ReactEcharts
         option = {{
         tooltip: {
@@ -108,6 +108,8 @@ const Charts = (props) => {
             }
         },
         dataZoom: [{
+            show: true,
+        },{
             type: 'inside'
         }],
         series: {
