@@ -112,6 +112,8 @@ function App() {
         
     } catch (error) {
       console.error('Ошибка:', error);
+      alert('Ошибка:', error)
+      setSpinner(false)
     }
   }
 
@@ -137,6 +139,8 @@ function App() {
 
     } catch (error) {
       console.error('Ошибка:', error);
+      alert('Ошибка:', error)
+      setSpinner(false)
     }
   }
 
