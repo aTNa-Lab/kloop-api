@@ -11,6 +11,9 @@ import {nest} from 'd3-collection'
 import * as test from './test.json'
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Snackbar from './Components/Snackbar/Snackbar'
+import { CSVLink  } from "react-csv";
+
+
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -205,6 +208,12 @@ function App() {
     setCharts(!charts)
   }
 
+  let test_data = [
+    { firstname: "Ahmed", lastname: "Tomi", email: "ah@smthing.co.com" },
+    { firstname: "Raed", lastname: "Labes", email: "rl@smthing.co.com" },
+    { firstname: "Yezzi", lastname: "Min l3b", email: "ymin@cocococo.com" }
+  ];
+
 
   return (
     <div className="App">
@@ -220,6 +229,9 @@ function App() {
         <TextField variant="outlined" id="radius" size="small" label="Radius" value={radius} onChange={handleRadiusChange} />
         <Button variant="contained" size="small" onClick={() => handlePostData()}>Send Data</Button>
         <div className={classes.spinner}>{showSpinner ? <CircularProgress size={32} style={{color: 'grey'}} /> : null}</div>
+      </Grid>
+      <Grid container justify="center" className={classes.gridItem}>
+        {sortedMetadata ? <CSVLink data={sortedMetadata} separator={"\t"}>Download TSV</CSVLink> : null}
       </Grid>
     </Grid>
     <div style={{padding: 20}}>

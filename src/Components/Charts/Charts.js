@@ -90,12 +90,19 @@ const Charts = (props) => {
             trigger: 'axis'
         },
         xAxis: {
-            data: props.timeRange
+            data: props.timeRange,
+            axisTick: {
+                alignWithLabel: true
+            }
+        },
+        axisPointer: {
+            link: {xAxisIndex: 'all'}
         },
         yAxis: {
-            splitLine: {
-                show: false
-            }
+            // splitLine: {
+            //     show: false
+            // },
+            type: 'value'
         },
         toolbox: {
             left: 'center',
@@ -107,6 +114,7 @@ const Charts = (props) => {
                 saveAsImage: {}
             }
         },
+        grid: {},
         dataZoom: [{
             show: true,
         },{
